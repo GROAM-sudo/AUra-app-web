@@ -5,106 +5,80 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<title>AURA PURE</title>
-
-<link rel="manifest" href="data:application/manifest+json,{'name':'AURA','short_name':'AURA','display':'standalone','background_color':'#000000','theme_color':'#000000','icons':[{'src':'https://cdn-icons-png.flaticon.com/512/3222/3222800.png','sizes':'512x512','type':'image/png'}]}">
+<title>AURA MINIMAL</title>
 
 <style>
-:root {
-    --text: #ffffff;
-    --nav-bg: rgba(0, 0, 0, 0.4);
-}
-
+:root { --text: #ffffff; }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { height: 100%; width: 100%; background: #000; color: var(--text); font-family: -apple-system, system-ui, sans-serif; overflow: hidden; }
+body, html { height: 100%; width: 100%; background: #000; color: var(--text); font-family: -apple-system, sans-serif; overflow: hidden; }
 
-/* ─── WALLPAPER NET (AUCUN FLOU) ─── */
-#wlbg { 
-    position: fixed; inset: 0; z-index: 1; 
-    background-size: cover; background-position: center; 
-}
-#wlbg video, #wlbg img { 
-    width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
-}
+/* ─── WALLPAPER (NET & LARGE) ─── */
+#wlbg { position: fixed; inset: 0; z-index: 1; }
+#wlbg video, #wlbg img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
 
-/* ─── INTERFACE ─── */
-#app { position: fixed; inset: 0; z-index: 10; display: flex; flex-direction: column; }
-#pages { flex: 1; position: relative; }
-.page { 
-    position: absolute; inset: 0; opacity: 0; pointer-events: none; 
-    transition: 0.4s; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-}
-.page.active { opacity: 1; pointer-events: all; }
+/* ─── INTERFACE MINIMALISTE ─── */
+#app { position: fixed; inset: 0; z-index: 10; padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom); display: flex; transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1); }
 
-/* Typo très propre avec ombre légère pour lisibilité */
-.clk-time { font-size: 28vw; font-weight: 800; letter-spacing: -5px; text-shadow: 0 4px 30px rgba(0,0,0,0.5); }
-.clk-date { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; margin-top: -15px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+/* Positions de l'heure */
+.pos-center { align-items: center; justify-content: center; text-align: center; }
+.pos-top-left { align-items: flex-start; justify-content: flex-start; text-align: left; }
+.pos-top-right { align-items: flex-start; justify-content: flex-end; text-align: right; }
+.pos-bottom-left { align-items: flex-end; justify-content: flex-start; text-align: left; }
+.pos-bottom-right { align-items: flex-end; justify-content: flex-end; text-align: right; }
 
-/* Zen sans fond opaque */
-.zen-ring { 
-    width: 180px; height: 180px; border-radius: 50%; border: 2px solid #fff; 
-    display: flex; align-items: center; justify-content: center; transition: 4s ease-in-out;
-}
-.inhale { transform: scale(1.6); border-width: 4px; }
+/* Styles de l'heure */
+.style-bold { font-size: 25vw; font-weight: 900; letter-spacing: -5px; }
+.style-thin { font-size: 22vw; font-weight: 100; letter-spacing: 10px; text-transform: uppercase; }
+.style-mono { font-size: 20vw; font-family: 'Courier New', monospace; font-weight: 400; }
+.style-classic { font-size: 24vw; font-family: serif; font-italic: italic; }
 
-/* Boutons invisibles/minimalistes */
-.btn-ui { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 11px; cursor: pointer; margin-top: 30px; }
+.time-container { cursor: pointer; text-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+.date-label { font-size: 14px; letter-spacing: 5px; text-transform: uppercase; opacity: 0.8; margin-top: 5px; }
 
-#nav { 
-    position: fixed; bottom: 0; width: 100%; height: 80px; 
-    background: linear-gradient(transparent, rgba(0,0,0,0.5));
-    display: flex; justify-content: center; gap: 60px; align-items: center; padding-bottom: env(safe-area-inset-bottom); z-index: 100; 
-}
-.nb { background: none; border: none; color: rgba(255,255,255,0.4); transition: 0.3s; }
-.nb.active { color: #fff; transform: translateY(-3px); }
-
-/* Selecteur */
-#sheet { position: fixed; inset: 0; z-index: 300; visibility: hidden; transition: 0.3s; background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); }
+/* Menu caché */
+#config-trigger { position: fixed; top: 10px; right: 10px; width: 40px; height: 40px; z-index: 100; opacity: 0.1; }
+#sheet { position: fixed; inset: 0; z-index: 300; visibility: hidden; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); transition: 0.3s; display: flex; align-items: flex-end; }
 #sheet.open { visibility: visible; }
-#panel { position: absolute; bottom: 0; width: 100%; padding: 20px; border-radius: 20px 20px 0 0; }
+#panel { width: 100%; padding: 30px; border-radius: 30px 30px 0 0; }
 .wp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-.wp-item { aspect-ratio: 9/16; border-radius: 8px; overflow: hidden; background: #222; border: 2px solid transparent; }
+.wp-item { aspect-ratio: 9/16; border-radius: 8px; overflow: hidden; background: #222; }
 .wp-item video, .wp-item img { width: 100%; height: 100%; object-fit: cover; }
+.btn-add { width: 100%; padding: 15px; border-radius: 15px; background: #fff; color: #000; border: none; font-weight: bold; }
 </style>
 </head>
 <body>
 
 <div id="wlbg"></div>
+<div id="config-trigger" onclick="openWp()"></div>
 
-<div id="app">
-    <div id="pages">
-        <div class="page active" id="p-clock">
-            <div class="clk-time" id="time">00:00</div>
-            <div class="clk-date" id="date">-- --- ----</div>
-            <button class="btn-ui" onclick="openWp()">WALLPAPER</button>
-        </div>
-        <div class="page" id="p-zen">
-            <div class="zen-ring" id="ring"><span id="ztxt" style="font-size:24px;">Zen</span></div>
-            <button class="btn-ui" id="zbtn" onclick="toggleZen()">DÉMARRER</button>
-        </div>
+<div id="app" class="pos-center">
+    <div class="time-container">
+        <div id="time" class="style-bold" onclick="nextStyle()">00:00</div>
+        <div id="date" class="date-label" onclick="nextPos()">Lundi 1 Janvier</div>
     </div>
-
-    <nav id="nav">
-        <button class="nb active" onclick="go('clock', this)"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></button>
-        <button class="nb" onclick="go('zen', this)"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M3 12h1"/></svg></button>
-    </nav>
 </div>
 
 <div id="sheet" onclick="if(event.target==this) closeWp()">
     <div id="panel">
+        <p style="margin-bottom: 15px; font-size: 12px; opacity: 0.5;">CLIQUE SUR L'HEURE POUR LE STYLE / SUR LA DATE POUR LA POSITION</p>
         <div class="wp-grid" id="wpgrid"></div>
         <input type="file" id="wpinput" accept="image/*,video/*" style="display:none" onchange="handleFile(this)">
-        <button class="btn-ui" style="width:100%" onclick="document.getElementById('wpinput').click()">+ AJOUTER FICHIER (VIDÉO/PHOTO)</button>
+        <button class="btn-add" onclick="document.getElementById('wpinput').click()">+ AJOUTER VIDÉO OU PHOTO</button>
     </div>
 </div>
 
 <script>
 let db;
-const req = indexedDB.open("aura_ultra", 2);
+const styles = ['style-bold', 'style-thin', 'style-mono', 'style-classic'];
+const positions = ['pos-center', 'pos-top-left', 'pos-top-right', 'pos-bottom-left', 'pos-bottom-right'];
+let curStyle = 0;
+let curPos = 0;
+
+// --- DATABASE (Vidéos Lourdes) ---
+const req = indexedDB.open("aura_v3", 1);
 req.onupgradeneeded = e => e.target.result.createObjectStore("media", {keyPath: "id"});
 req.onsuccess = e => { db = e.target.result; loadMedia(); };
 
-// --- FONCTION FICHIER LOURD ---
 function handleFile(input) {
     const file = input.files[0];
     if (!file) return;
@@ -115,7 +89,7 @@ function handleFile(input) {
         tx.objectStore("media").put(item);
         tx.oncomplete = () => { loadMedia(); applyMedia(item); };
     };
-    reader.readAsDataURL(file); // Encode en Base64 pour le stockage permanent
+    reader.readAsDataURL(file);
 }
 
 function loadMedia() {
@@ -129,8 +103,7 @@ function loadMedia() {
             div.innerHTML = m.type.includes('video') ? `<video src="${m.data}" muted></video>` : `<img src="${m.data}">`;
             grid.appendChild(div);
         });
-        // Appliquer le dernier fond sauvé
-        const lastID = localStorage.getItem('last_id');
+        const lastID = localStorage.getItem('aura_last_id');
         if(lastID) {
             const last = items.find(i => i.id === lastID);
             if(last) applyMedia(last);
@@ -141,19 +114,30 @@ function loadMedia() {
 function applyMedia(m) {
     const box = document.getElementById('wlbg');
     box.innerHTML = m.type.includes('video') ? `<video src="${m.data}" autoplay loop muted playsinline></video>` : `<img src="${m.data}">`;
-    localStorage.setItem('last_id', m.id);
+    localStorage.setItem('aura_last_id', m.id);
     closeWp();
 }
 
+// --- PERSONNALISATION ---
+function nextStyle() {
+    curStyle = (curStyle + 1) % styles.length;
+    const t = document.getElementById('time');
+    styles.forEach(s => t.classList.remove(s));
+    t.classList.add(styles[curStyle]);
+    localStorage.setItem('aura_style', curStyle);
+}
+
+function nextPos() {
+    curPos = (curPos + 1) % positions.length;
+    const app = document.getElementById('app');
+    positions.forEach(p => app.classList.remove(p));
+    app.classList.add(positions[curPos]);
+    localStorage.setItem('aura_pos', curPos);
+}
+
+// --- UTILITAIRES ---
 function openWp() { document.getElementById('sheet').classList.add('open'); }
 function closeWp() { document.getElementById('sheet').classList.remove('open'); }
-
-function go(id, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
-    document.getElementById('p-'+id).classList.add('active');
-    btn.classList.add('active');
-}
 
 function clock() {
     const n = new Date();
@@ -162,24 +146,13 @@ function clock() {
 }
 setInterval(clock, 1000); clock();
 
-let zRun = false;
-function toggleZen() {
-    zRun = !zRun;
-    const ring = document.getElementById('ring');
-    const btn = document.getElementById('zbtn');
-    if(!zRun) { btn.textContent = "DÉMARRER"; ring.className="zen-ring"; return; }
-    btn.textContent = "ARRÊTER";
-    const cycle = () => {
-        if(!zRun) return;
-        ring.classList.add('inhale'); document.getElementById('ztxt').textContent = "In";
-        setTimeout(() => {
-            if(!zRun) return;
-            ring.classList.remove('inhale'); document.getElementById('ztxt').textContent = "Out";
-            setTimeout(cycle, 6000);
-        }, 4000);
-    };
-    cycle();
-}
+// --- RESTAURER PRÉFÉRENCES ---
+window.addEventListener('load', () => {
+    const s = localStorage.getItem('aura_style');
+    const p = localStorage.getItem('aura_pos');
+    if(s) { curStyle = parseInt(s); document.getElementById('time').className = styles[curStyle]; }
+    if(p) { curPos = parseInt(p); document.getElementById('app').className = positions[curPos]; }
+});
 </script>
 </body>
 </html>
