@@ -5,154 +5,173 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<title>AURA MINIMAL</title>
+<title>AURA PURE</title>
 
 <style>
 :root { --text: #ffffff; }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body, html { height: 100%; width: 100%; background: #000; color: var(--text); font-family: -apple-system, sans-serif; overflow: hidden; }
 
-/* ─── WALLPAPER (NET & LARGE) ─── */
-#wlbg { position: fixed; inset: 0; z-index: 1; }
+/* ─── WALLPAPER ─── */
+#wlbg { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 #wlbg video, #wlbg img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
 
-/* ─── INTERFACE MINIMALISTE ─── */
-#app { position: fixed; inset: 0; z-index: 10; padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom); display: flex; transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1); }
-
-/* Positions de l'heure */
-.pos-center { align-items: center; justify-content: center; text-align: center; }
-.pos-top-left { align-items: flex-start; justify-content: flex-start; text-align: left; }
-.pos-top-right { align-items: flex-start; justify-content: flex-end; text-align: right; }
-.pos-bottom-left { align-items: flex-end; justify-content: flex-start; text-align: left; }
-.pos-bottom-right { align-items: flex-end; justify-content: flex-end; text-align: right; }
+/* ─── INTERFACE ─── */
+#app { 
+    position: fixed; inset: 0; z-index: 50; /* Très haut z-index */
+    padding: env(safe-area-inset-top) 30px env(safe-area-inset-bottom);
+    display: flex; transition: all 0.5s ease;
+    pointer-events: none; /* L'app elle-même ne bloque pas, mais ses enfants oui */
+}
 
 /* Styles de l'heure */
-.style-bold { font-size: 25vw; font-weight: 900; letter-spacing: -5px; }
-.style-thin { font-size: 22vw; font-weight: 100; letter-spacing: 10px; text-transform: uppercase; }
-.style-mono { font-size: 20vw; font-family: 'Courier New', monospace; font-weight: 400; }
-.style-classic { font-size: 24vw; font-family: serif; font-italic: italic; }
+.s0 { font-size: 28vw; font-weight: 900; letter-spacing: -5px; } 
+.s1 { font-size: 22vw; font-weight: 100; letter-spacing: 5px; text-transform: uppercase; } 
+.s2 { font-size: 20vw; font-family: 'Courier New', monospace; } 
+.s3 { font-size: 24vw; font-family: serif; font-style: italic; } 
 
-.time-container { cursor: pointer; text-shadow: 0 4px 30px rgba(0,0,0,0.3); }
-.date-label { font-size: 14px; letter-spacing: 5px; text-transform: uppercase; opacity: 0.8; margin-top: 5px; }
+/* Positions */
+.p0 { align-items: center; justify-content: center; text-align: center; }
+.p1 { align-items: flex-start; justify-content: flex-start; text-align: left; padding-top: 40px; }
+.p2 { align-items: flex-start; justify-content: flex-end; text-align: right; padding-top: 40px; }
+.p3 { align-items: flex-end; justify-content: flex-start; text-align: left; padding-bottom: 100px; }
+.p4 { align-items: flex-end; justify-content: flex-end; text-align: right; padding-bottom: 100px; }
 
-/* Menu caché */
-#config-trigger { position: fixed; top: 10px; right: 10px; width: 40px; height: 40px; z-index: 100; opacity: 0.1; }
-#sheet { position: fixed; inset: 0; z-index: 300; visibility: hidden; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); transition: 0.3s; display: flex; align-items: flex-end; }
+/* LE TEXTE DEVIENT CLIQUABLE */
+#time, #date {
+    pointer-events: all !important; /* FORCE LE CLIC */
+    cursor: pointer;
+    display: inline-block;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+    transition: transform 0.1s;
+}
+#time:active, #date:active { transform: scale(0.95); opacity: 0.7; }
+
+/* Bouton Menu */
+#ui-toggle {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    z-index: 100; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px); color: white; padding: 12px 24px; border-radius: 30px;
+    font-size: 10px; letter-spacing: 2px; cursor: pointer;
+}
+
+/* Sheet */
+#sheet { 
+    position: fixed; inset: 0; z-index: 300; visibility: hidden; 
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); 
+    display: flex; align-items: flex-end; transition: 0.3s;
+}
 #sheet.open { visibility: visible; }
-#panel { width: 100%; padding: 30px; border-radius: 30px 30px 0 0; }
-.wp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-.wp-item { aspect-ratio: 9/16; border-radius: 8px; overflow: hidden; background: #222; }
-.wp-item video, .wp-item img { width: 100%; height: 100%; object-fit: cover; }
-.btn-add { width: 100%; padding: 15px; border-radius: 15px; background: #fff; color: #000; border: none; font-weight: bold; }
+#panel { width: 100%; padding: 30px; background: #000; border-radius: 30px 30px 0 0; }
+.wp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; max-height: 40vh; overflow-y: auto; }
+.wp-item { aspect-ratio: 9/16; border-radius: 10px; overflow: hidden; background: #222; border: 1px solid #333; }
+.wp-item img, .wp-item video { width: 100%; height: 100%; object-fit: cover; }
+.btn-add { width: 100%; padding: 18px; border-radius: 15px; background: #fff; border: none; font-weight: bold; cursor: pointer; }
 </style>
 </head>
 <body>
 
 <div id="wlbg"></div>
-<div id="config-trigger" onclick="openWp()"></div>
 
-<div id="app" class="pos-center">
-    <div class="time-container">
-        <div id="time" class="style-bold" onclick="nextStyle()">00:00</div>
-        <div id="date" class="date-label" onclick="nextPos()">Lundi 1 Janvier</div>
+<button id="ui-toggle" onclick="openWp()">MENU</button>
+
+<div id="app" class="p0">
+    <div>
+        <div id="time" class="s0" onclick="changeStyle()">00:00</div>
+        <br>
+        <div id="date" style="font-size: 14px; letter-spacing: 4px; text-transform: uppercase; opacity: 0.8;" onclick="changePos()">Date</div>
     </div>
 </div>
 
-<div id="sheet" onclick="if(event.target==this) closeWp()">
-    <div id="panel">
-        <p style="margin-bottom: 15px; font-size: 12px; opacity: 0.5;">CLIQUE SUR L'HEURE POUR LE STYLE / SUR LA DATE POUR LA POSITION</p>
+<div id="sheet" onclick="closeWp()">
+    <div id="panel" onclick="event.stopPropagation()">
+        <p style="color: #666; font-size: 11px; margin-bottom: 20px; text-align: center; letter-spacing: 1px;">
+            CLIQUE SUR L'HEURE (STYLE) <br> CLIQUE SUR LA DATE (POSITION)
+        </p>
         <div class="wp-grid" id="wpgrid"></div>
-        <input type="file" id="wpinput" accept="image/*,video/*" style="display:none" onchange="handleFile(this)">
-        <button class="btn-add" onclick="document.getElementById('wpinput').click()">+ AJOUTER VIDÉO OU PHOTO</button>
+        <input type="file" id="wpinput" accept="image/*,video/*" style="display:none" onchange="addFile(this)">
+        <button class="btn-add" onclick="document.getElementById('wpinput').click()">AJOUTER MEDIA LOURD</button>
     </div>
 </div>
 
 <script>
 let db;
-const styles = ['style-bold', 'style-thin', 'style-mono', 'style-classic'];
-const positions = ['pos-center', 'pos-top-left', 'pos-top-right', 'pos-bottom-left', 'pos-bottom-right'];
-let curStyle = 0;
-let curPos = 0;
+let sIndex = 0;
+let pIndex = 0;
 
-// --- DATABASE (Vidéos Lourdes) ---
-const req = indexedDB.open("aura_v3", 1);
+// Base de données pour vidéos lourdes
+const req = indexedDB.open("AuraPureV4", 1);
 req.onupgradeneeded = e => e.target.result.createObjectStore("media", {keyPath: "id"});
-req.onsuccess = e => { db = e.target.result; loadMedia(); };
+req.onsuccess = e => { db = e.target.result; renderGallery(); };
 
-function handleFile(input) {
+function addFile(input) {
     const file = input.files[0];
-    if (!file) return;
+    if(!file) return;
     const reader = new FileReader();
     reader.onload = (e) => {
         const item = { id: "m_" + Date.now(), data: e.target.result, type: file.type };
         const tx = db.transaction("media", "readwrite");
-        tx.objectStore("media").put(item);
-        tx.oncomplete = () => { loadMedia(); applyMedia(item); };
+        tx.objectStore("media").add(item);
+        tx.oncomplete = () => { renderGallery(); setWall(item); };
     };
     reader.readAsDataURL(file);
 }
 
-function loadMedia() {
-    const grid = document.getElementById('wpgrid'); grid.innerHTML = '';
+function renderGallery() {
+    const grid = document.getElementById('wpgrid');
+    grid.innerHTML = '';
     db.transaction("media").objectStore("media").getAll().onsuccess = e => {
         const items = e.target.result;
         items.forEach(m => {
             const div = document.createElement('div');
             div.className = 'wp-item';
-            div.onclick = () => applyMedia(m);
+            div.onclick = () => setWall(m);
             div.innerHTML = m.type.includes('video') ? `<video src="${m.data}" muted></video>` : `<img src="${m.data}">`;
             grid.appendChild(div);
         });
-        const lastID = localStorage.getItem('aura_last_id');
-        if(lastID) {
-            const last = items.find(i => i.id === lastID);
-            if(last) applyMedia(last);
+        const last = localStorage.getItem('last_id');
+        if(last) {
+            const found = items.find(i => i.id === last);
+            if(found) setWall(found);
         }
     };
 }
 
-function applyMedia(m) {
+function setWall(m) {
     const box = document.getElementById('wlbg');
     box.innerHTML = m.type.includes('video') ? `<video src="${m.data}" autoplay loop muted playsinline></video>` : `<img src="${m.data}">`;
-    localStorage.setItem('aura_last_id', m.id);
+    localStorage.setItem('last_id', m.id);
     closeWp();
 }
 
-// --- PERSONNALISATION ---
-function nextStyle() {
-    curStyle = (curStyle + 1) % styles.length;
-    const t = document.getElementById('time');
-    styles.forEach(s => t.classList.remove(s));
-    t.classList.add(styles[curStyle]);
-    localStorage.setItem('aura_style', curStyle);
+function changeStyle() {
+    sIndex = (parseInt(sIndex) + 1) % 4;
+    document.getElementById('time').className = 's' + sIndex;
+    localStorage.setItem('pref_s', sIndex);
 }
 
-function nextPos() {
-    curPos = (curPos + 1) % positions.length;
-    const app = document.getElementById('app');
-    positions.forEach(p => app.classList.remove(p));
-    app.classList.add(positions[curPos]);
-    localStorage.setItem('aura_pos', curPos);
+function changePos() {
+    pIndex = (parseInt(pIndex) + 1) % 5;
+    document.getElementById('app').className = 'p' + pIndex;
+    localStorage.setItem('pref_p', pIndex);
 }
 
-// --- UTILITAIRES ---
 function openWp() { document.getElementById('sheet').classList.add('open'); }
 function closeWp() { document.getElementById('sheet').classList.remove('open'); }
 
-function clock() {
+function updateClock() {
     const n = new Date();
-    document.getElementById('time').textContent = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0');
-    document.getElementById('date').textContent = n.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+    document.getElementById('time').innerText = n.getHours().toString().padStart(2,'0') + ":" + n.getMinutes().toString().padStart(2,'0');
+    document.getElementById('date').innerText = n.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
 }
-setInterval(clock, 1000); clock();
+setInterval(updateClock, 1000); updateClock();
 
-// --- RESTAURER PRÉFÉRENCES ---
-window.addEventListener('load', () => {
-    const s = localStorage.getItem('aura_style');
-    const p = localStorage.getItem('aura_pos');
-    if(s) { curStyle = parseInt(s); document.getElementById('time').className = styles[curStyle]; }
-    if(p) { curPos = parseInt(p); document.getElementById('app').className = positions[curPos]; }
-});
+window.onload = () => {
+    const s = localStorage.getItem('pref_s');
+    const p = localStorage.getItem('pref_p');
+    if(s !== null) { sIndex = s; document.getElementById('time').className = 's'+s; }
+    if(p !== null) { pIndex = p; document.getElementById('app').className = 'p'+p; }
+};
 </script>
 </body>
 </html>
