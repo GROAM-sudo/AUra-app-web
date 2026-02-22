@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<title>AURA CUSTOM</title>
+<title>AURA CUSTOM PRO</title>
 
 <style>
-:root { --text: #ffffff; }
+:root { --text-color: #ffffff; }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body, html { height: 100%; width: 100%; background: #000; color: var(--text); font-family: -apple-system, sans-serif; overflow: hidden; }
+body, html { height: 100%; width: 100%; background: #000; color: white; font-family: -apple-system, sans-serif; overflow: hidden; }
 
 /* ─── WALLPAPER ─── */
 #wlbg { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
@@ -22,29 +22,32 @@ body, html { height: 100%; width: 100%; background: #000; color: var(--text); fo
     padding: env(safe-area-inset-top) 40px env(safe-area-inset-bottom);
     display: flex; transition: all 0.4s ease;
     pointer-events: none;
+    color: var(--text-color); /* Utilise la couleur choisie */
 }
 
-/* Styles de base (la taille sera écrasée par le slider) */
+/* Styles de police */
 .s0 { font-weight: 900; letter-spacing: -5px; line-height: 0.9; } 
 .s1 { font-weight: 100; letter-spacing: 5px; text-transform: uppercase; } 
 .s2 { font-family: 'Courier New', monospace; font-weight: bold; } 
 .s3 { font-family: serif; font-style: italic; } 
 
+/* Positions */
 .p0 { align-items: center; justify-content: center; text-align: center; }
 .p1 { align-items: flex-start; justify-content: flex-start; text-align: left; padding-top: 60px; }
 .p2 { align-items: flex-start; justify-content: flex-end; text-align: right; padding-top: 60px; }
 .p3 { align-items: flex-end; justify-content: flex-start; text-align: left; padding-bottom: 120px; }
 .p4 { align-items: flex-end; justify-content: flex-end; text-align: right; padding-bottom: 120px; }
 
-.time-content { text-shadow: 0 4px 40px rgba(0,0,0,0.6); }
+.time-content { text-shadow: 0 4px 40px rgba(0,0,0,0.3); }
 
 /* ─── MENU TRIGGER ─── */
 #menu-trigger {
     position: fixed; bottom: 30px; right: 30px; 
-    z-index: 100; width: 50px; height: 50px;
+    z-index: 100; width: 55px; height: 55px;
     background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
     backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
 }
 
 /* ─── PANEL ─── */
@@ -54,33 +57,30 @@ body, html { height: 100%; width: 100%; background: #000; color: var(--text); fo
     display: flex; align-items: flex-end; transition: 0.3s;
 }
 #sheet.open { visibility: visible; }
-#panel { width: 100%; padding: 30px; background: #111; border-radius: 30px 30px 0 0; }
+#panel { width: 100%; padding: 30px; background: #111; border-radius: 30px 30px 0 0; max-height: 85vh; overflow-y: auto; }
 
-.menu-section { margin-bottom: 20px; }
-.menu-label { font-size: 10px; letter-spacing: 2px; color: #666; margin-bottom: 10px; text-transform: uppercase; display: flex; justify-content: space-between; }
+.menu-section { margin-bottom: 25px; }
+.menu-label { font-size: 11px; letter-spacing: 2px; color: #777; margin-bottom: 12px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
 
-/* SLIDER STYLE */
-input[type=range] {
-    width: 100%; -webkit-appearance: none; background: transparent; margin: 15px 0;
+/* INPUTS STYLE */
+input[type=range] { width: 100%; -webkit-appearance: none; background: transparent; height: 30px; }
+input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #333; border-radius: 2px; }
+input[type=range]::-webkit-slider-thumb { height: 22px; width: 22px; border-radius: 50%; background: #fff; -webkit-appearance: none; margin-top: -9px; border: 2px solid #111; }
+
+input[type=color] {
+    -webkit-appearance: none; border: none; width: 40px; height: 40px; 
+    background: none; cursor: pointer; border-radius: 50%; overflow: hidden;
 }
-input[type=range]:focus { outline: none; }
-input[type=range]::-webkit-slider-runnable-track {
-    width: 100%; height: 4px; cursor: pointer; background: #333; border-radius: 2px;
-}
-input[type=range]::-webkit-slider-thumb {
-    height: 20px; width: 20px; border-radius: 50%; background: #fff;
-    cursor: pointer; -webkit-appearance: none; margin-top: -8px;
-}
+input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type=color]::-webkit-color-swatch { border: 2px solid #333; border-radius: 50%; }
 
 .btn-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
-.opt-btn { 
-    padding: 8px 15px; background: #222; border: 1px solid #444; 
-    color: #fff; border-radius: 10px; font-size: 11px;
-}
-.wp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; max-height: 120px; overflow-y: auto; }
-.wp-item { aspect-ratio: 9/16; border-radius: 6px; overflow: hidden; background: #222; }
+.opt-btn { padding: 10px 16px; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; font-size: 11px; cursor: pointer; }
+
+.wp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
+.wp-item { aspect-ratio: 9/16; border-radius: 8px; overflow: hidden; background: #222; border: 1px solid #333; }
 .wp-item * { width: 100%; height: 100%; object-fit: cover; }
-.btn-add { width: 100%; padding: 15px; border-radius: 12px; background: #fff; border: none; font-weight: bold; }
+.btn-add { width: 100%; padding: 18px; border-radius: 15px; background: #fff; border: none; font-weight: bold; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -94,19 +94,22 @@ input[type=range]::-webkit-slider-thumb {
 <div id="app" class="p0">
     <div class="time-content">
         <div id="time" class="s0" style="font-size: 25vw;">00:00</div>
-        <div id="date" style="font-size: 14px; letter-spacing: 5px; text-transform: uppercase; opacity: 0.8;">Date</div>
+        <div id="date" style="font-size: 14px; letter-spacing: 5px; text-transform: uppercase; opacity: 0.8; margin-top: 10px;">Date</div>
     </div>
 </div>
 
 <div id="sheet" onclick="closeWp()">
     <div id="panel" onclick="event.stopPropagation()">
         
-        <div class="menu-section">
-            <div class="menu-label">
-                <span>Taille du texte</span>
-                <span id="size-val" style="color:#fff">50%</span>
+        <div style="display: flex; gap: 30px; align-items: flex-start;">
+            <div class="menu-section" style="flex: 1;">
+                <div class="menu-label">Taille <span id="size-val">50%</span></div>
+                <input type="range" id="size-slider" min="10" max="70" value="25" oninput="updateSize(this.value)">
             </div>
-            <input type="range" id="size-slider" min="10" max="60" value="25" oninput="updateSize(this.value)">
+            <div class="menu-section" style="text-align: center;">
+                <div class="menu-label">Couleur</div>
+                <input type="color" id="color-picker" value="#ffffff" oninput="updateColor(this.value)">
+            </div>
         </div>
 
         <div class="menu-section">
@@ -117,7 +120,7 @@ input[type=range]::-webkit-slider-thumb {
                 <button class="opt-btn" onclick="setStyle(2)">Mono</button>
                 <button class="opt-btn" onclick="setStyle(3)">Italic</button>
             </div>
-            <div class="btn-row" style="margin-top:8px">
+            <div class="btn-row" style="margin-top:10px">
                 <button class="opt-btn" onclick="setPos(0)">Milieu</button>
                 <button class="opt-btn" onclick="setPos(1)">H-G</button>
                 <button class="opt-btn" onclick="setPos(2)">H-D</button>
@@ -130,7 +133,7 @@ input[type=range]::-webkit-slider-thumb {
             <div class="menu-label">Fonds d'écran</div>
             <div class="wp-grid" id="wpgrid"></div>
             <input type="file" id="wpinput" accept="image/*,video/*" style="display:none" onchange="addFile(this)">
-            <button class="btn-add" onclick="document.getElementById('wpinput').click()">+ AJOUTER FICHIER</button>
+            <button class="btn-add" onclick="document.getElementById('wpinput').click()">+ AJOUTER FICHIER LOURD</button>
         </div>
 
     </div>
@@ -138,21 +141,24 @@ input[type=range]::-webkit-slider-thumb {
 
 <script>
 let db;
-const req = indexedDB.open("AuraFinalDB", 1);
+const req = indexedDB.open("AuraColorDB", 1);
 req.onupgradeneeded = e => e.target.result.createObjectStore("media", {keyPath: "id"});
 req.onsuccess = e => { db = e.target.result; renderGallery(); };
 
 function updateSize(val) {
-    // On convertit la valeur du slider (10-60) en pourcentage visuel pour l'utilisateur
-    let percent = Math.round((val / 60) * 100);
+    let percent = Math.round(((val - 10) / 60) * 100);
     document.getElementById('size-val').innerText = percent + "%";
     document.getElementById('time').style.fontSize = val + "vw";
     localStorage.setItem('pref_size', val);
 }
 
+function updateColor(hex) {
+    document.documentElement.style.setProperty('--text-color', hex);
+    localStorage.setItem('pref_color', hex);
+}
+
 function setStyle(idx) {
-    const t = document.getElementById('time');
-    t.className = 's' + idx;
+    document.getElementById('time').className = 's' + idx;
     localStorage.setItem('pref_s', idx);
 }
 
@@ -214,12 +220,12 @@ window.onload = () => {
     const s = localStorage.getItem('pref_s');
     const p = localStorage.getItem('pref_p');
     const size = localStorage.getItem('pref_size');
+    const color = localStorage.getItem('pref_color');
+    
     if(s !== null) setStyle(s);
     if(p !== null) setPos(p);
-    if(size !== null) {
-        document.getElementById('size-slider').value = size;
-        updateSize(size);
-    }
+    if(size !== null) { document.getElementById('size-slider').value = size; updateSize(size); }
+    if(color !== null) { document.getElementById('color-picker').value = color; updateColor(color); }
 };
 </script>
 </body>
